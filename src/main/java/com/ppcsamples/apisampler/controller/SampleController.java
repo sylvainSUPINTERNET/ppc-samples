@@ -1,7 +1,9 @@
 package com.ppcsamples.apisampler.controller;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -11,6 +13,7 @@ import java.util.stream.Stream;
 
 import com.ppcsamples.apisampler.metadata.SampleFormatEnum;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -64,7 +67,7 @@ public class SampleController {
            UUID fileUuid = UUID.randomUUID();  
            String fileNameToCreate =String.format("%s-%s.%s", fileNameParts[0], fileUuid.toString(), formatConfirmed);
            String pathToCreate = String.format("%s/%s", System.getProperty("user.dir").replace("\\","/") + "/" + "samples", fileNameToCreate);
-
+           
            System.out.println(pathToCreate);
 
            File sampleUpload = new File(pathToCreate);
@@ -73,6 +76,18 @@ public class SampleController {
             } else {
                 System.out.println("File already exists.");
             }
+            
+
+            if ( sampleUpload.canWrite() && sampleUpload.canRead() ) {
+                InputStream is = sample.getInputStream();
+                FileUtils.copyInputStreamToFile(is, sampleUpload);
+                System.out.println("Write buffer");
+                
+            } else {
+                System.out.println("File access issue, can't write or read.");
+            }
+           
+            
            //InputStream is = sample.getInputStream();
            //File sampleUpload = new File(fileNameToCreate);
            //sampleUpload.createNewFile();
