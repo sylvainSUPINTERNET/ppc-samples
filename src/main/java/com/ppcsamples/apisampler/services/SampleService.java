@@ -27,7 +27,7 @@ public class SampleService implements ISample {
     Logger logger = LoggerFactory.getLogger(SampleService.class);
 
     @Override
-    public ResponseEntity<?> uploadSample(MultipartFile sample){
+    public ResponseEntity<?> uploadSample(MultipartFile sample, String authToken){
 
         Map<String, Object> response = new HashMap<>();
         try {

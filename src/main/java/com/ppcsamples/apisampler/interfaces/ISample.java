@@ -6,6 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public interface ISample {
-    public ResponseEntity<?> uploadSample(MultipartFile file);
+    public ResponseEntity<?> uploadSample(MultipartFile file, String authToken);
 
 }

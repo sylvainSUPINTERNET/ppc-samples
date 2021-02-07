@@ -6,3 +6,7 @@ spring:
 
 server:
     port : 7777
+
+
+ppc:
+    authCheckUrl: http://localhost:5999/api/v1/token/verify
