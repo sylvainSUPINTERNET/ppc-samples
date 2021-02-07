@@ -1,5 +1,6 @@
 package com.ppcsamples.apisampler.controller;
 
+import com.ppcsamples.apisampler.DTO.UserDetailsDTO;
 import com.ppcsamples.apisampler.services.SampleService;
 
 import org.slf4j.Logger;
@@ -35,8 +36,9 @@ public class SampleController {
 
     @CrossOrigin(origins = "*")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addSample (@RequestPart MultipartFile sample, @RequestAttribute String filterPpcToken) {
+    public ResponseEntity<?> addSample (@RequestPart MultipartFile sample, @RequestAttribute String filterPpcToken, @RequestAttribute UserDetailsDTO userDetails) {
         System.out.println(filterPpcToken);
+        System.out.println(userDetails.getEmail());
         return this.sampleService.uploadSample(sample, filterPpcToken);
     }
 

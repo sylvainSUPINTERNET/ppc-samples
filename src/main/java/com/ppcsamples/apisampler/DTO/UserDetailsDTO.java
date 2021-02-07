@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserDetailsDTO {
-    int sub;
+    String sub;
     String name;
     String given_name;
     String family_name;
@@ -20,7 +20,7 @@ public class UserDetailsDTO {
     public String getName(){
         return this.name;
     }
-    public int getSub() {
+    public String getSub() {
         return this.sub;
     }
     public String getGivenName(){
