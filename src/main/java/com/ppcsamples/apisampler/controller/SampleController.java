@@ -39,7 +39,7 @@ public class SampleController {
     public ResponseEntity<?> addSample (@RequestPart MultipartFile sample, @RequestAttribute String filterPpcToken, @RequestAttribute UserDetailsDTO userDetails) {
         System.out.println(filterPpcToken);
         System.out.println(userDetails.getEmail());
-        return this.sampleService.uploadSample(sample, filterPpcToken);
+        return this.sampleService.uploadSample(sample, filterPpcToken, userDetails);
     }
 
 

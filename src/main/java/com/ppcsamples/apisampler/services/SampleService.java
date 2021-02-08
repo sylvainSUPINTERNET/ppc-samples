@@ -10,6 +10,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.ppcsamples.apisampler.DTO.UserDetailsDTO;
 import com.ppcsamples.apisampler.interfaces.ISample;
 import com.ppcsamples.apisampler.metadata.SampleFormatEnum;
 
@@ -27,7 +28,7 @@ public class SampleService implements ISample {
     Logger logger = LoggerFactory.getLogger(SampleService.class);
 
     @Override
-    public ResponseEntity<?> uploadSample(MultipartFile sample, String authToken){
+    public ResponseEntity<?> uploadSample(MultipartFile sample, String authToken, UserDetailsDTO userDetailsDTO){
 
         Map<String, Object> response = new HashMap<>();
         try {
@@ -77,6 +78,7 @@ public class SampleService implements ISample {
             }
             response.put("status", HttpStatus.OK);
             response.put("data", sampleUpload.getName());
+            
             return ResponseEntity.ok().body(response);
 
         }    catch (Exception ex) {
