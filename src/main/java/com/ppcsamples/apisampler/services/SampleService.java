@@ -27,6 +27,20 @@ import org.springframework.web.server.ResponseStatusException;
 public class SampleService implements ISample {
     Logger logger = LoggerFactory.getLogger(SampleService.class);
 
+    UserSampleService userSampleService;
+
+    SampleService(UserSampleService userSampleService) {
+        this.userSampleService = userSampleService;
+    }
+
+    // TEST
+    public ResponseEntity<?> mock(UserDetailsDTO userDetailsDTO) {
+        String email = userDetailsDTO.getEmail();
+        String name = userDetailsDTO.getName();
+        return ResponseEntity.ok().body(this.userSampleService.getUserSampleModel(email, name));
+    }
+
+
     @Override
     public ResponseEntity<?> uploadSample(MultipartFile sample, String authToken, UserDetailsDTO userDetailsDTO){
 
@@ -78,7 +92,6 @@ public class SampleService implements ISample {
             }
             response.put("status", HttpStatus.OK);
             response.put("data", sampleUpload.getName());
-            
             return ResponseEntity.ok().body(response);
 
         }    catch (Exception ex) {
