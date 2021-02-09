@@ -27,12 +27,7 @@ public class SampleController {
     SampleController(SampleService sampleService){
         this.sampleService = sampleService;
     };
-    
 
-    @GetMapping("/")
-    public ResponseEntity<?> test() {
-        return ResponseEntity.ok().body("Ok");
-    }
 
     @CrossOrigin(origins = "*")
     @GetMapping("/")
