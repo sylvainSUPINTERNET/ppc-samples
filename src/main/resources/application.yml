@@ -4,6 +4,12 @@ spring:
             max-file-size: 512MB
             max-request-size: 512MB
 
+    data:
+        mongodb:
+            database: ppc-sample
+            host: localhost
+            port: 27017
+
 server:
     port : 7777
 

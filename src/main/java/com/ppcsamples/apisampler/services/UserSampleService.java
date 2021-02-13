@@ -1,5 +1,7 @@
 package com.ppcsamples.apisampler.services;
 
+import java.util.List;
+
 import com.ppcsamples.apisampler.interfaces.IUserSample;
 import com.ppcsamples.apisampler.models.UserSampleModel;
 import com.ppcsamples.apisampler.repository.UserSampleRepository;
@@ -15,10 +17,12 @@ public class UserSampleService implements IUserSample {
         this.userSampleRepository = userSampleRepository;
     }
 
-    @Override
-    public UserSampleModel getUserSampleModel(String email, String name) {
-        UserSampleModel user = this.userSampleRepository.findByEmailAndName(email, name);
-        return user;
+    UserSampleModel createUserSample(UserSampleModel userSampleModel){
+        return this.userSampleRepository.save(userSampleModel);
+    }
+
+    List<UserSampleModel> createAllUsersSamples(List<UserSampleModel> userSampleModel){
+        return this.userSampleRepository.saveAll(userSampleModel);
     }
 
     

@@ -6,7 +6,9 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "userSample")
 public class UserSampleModel {
     @Id 
     public String id;
@@ -23,9 +25,9 @@ public class UserSampleModel {
     @LastModifiedDate
     private LocalDateTime modified;
 
-    UserSampleModel(){};
+    public UserSampleModel(){};
 
-    UserSampleModel(String sampleUrl, String email, String name) {
+    public UserSampleModel(String sampleUrl, String email, String name) {
         this.sampleUrl = sampleUrl;
         this.email = email;
         this.name = name;

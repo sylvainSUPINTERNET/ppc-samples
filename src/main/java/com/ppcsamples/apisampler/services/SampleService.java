@@ -2,6 +2,9 @@ package com.ppcsamples.apisampler.services;
 
 import java.io.File;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +16,7 @@ import java.util.stream.Stream;
 import com.ppcsamples.apisampler.DTO.UserDetailsDTO;
 import com.ppcsamples.apisampler.interfaces.ISample;
 import com.ppcsamples.apisampler.metadata.SampleFormatEnum;
+import com.ppcsamples.apisampler.models.UserSampleModel;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -32,14 +36,6 @@ public class SampleService implements ISample {
     SampleService(UserSampleService userSampleService) {
         this.userSampleService = userSampleService;
     }
-
-    // TEST
-    public ResponseEntity<?> mock(UserDetailsDTO userDetailsDTO) {
-        String email = userDetailsDTO.getEmail();
-        String name = userDetailsDTO.getName();
-        return ResponseEntity.ok().body(this.userSampleService.getUserSampleModel(email, name));
-    }
-
 
     @Override
     public ResponseEntity<?> uploadSample(MultipartFile sample, String authToken, UserDetailsDTO userDetailsDTO){
@@ -92,7 +88,14 @@ public class SampleService implements ISample {
             }
             response.put("status", HttpStatus.OK);
             response.put("data", sampleUpload.getName());
-            return ResponseEntity.ok().body(response);
+
+            String mediaFileNameEncoded = URLEncoder.encode(sampleUpload.getName(), StandardCharsets.UTF_8);
+            String fullUrl = String.format("http://localhost:7777/api/v1/%s", mediaFileNameEncoded);
+            URL URLGui = new URL(fullUrl);
+
+            UserSampleModel us = new UserSampleModel(URLGui.toString(), userDetailsDTO.getEmail(), userDetailsDTO.getName());
+            UserSampleModel newUserSample = this.userSampleService.createUserSample(us);
+            return ResponseEntity.ok().body(newUserSample);
 
         }    catch (Exception ex) {
             logger.info(ex.getMessage());

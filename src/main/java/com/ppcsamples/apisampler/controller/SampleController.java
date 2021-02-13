@@ -28,14 +28,6 @@ public class SampleController {
         this.sampleService = sampleService;
     };
 
-
-    @CrossOrigin(origins = "*")
-    @GetMapping("/")
-    public ResponseEntity<?> test (@RequestAttribute String filterPpcToken, @RequestAttribute UserDetailsDTO userDetails) {
-        return this.sampleService.mock(userDetails);
-    }
-
-
     @CrossOrigin(origins = "*")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addSample (@RequestPart MultipartFile sample, @RequestAttribute String filterPpcToken, @RequestAttribute UserDetailsDTO userDetails) {
