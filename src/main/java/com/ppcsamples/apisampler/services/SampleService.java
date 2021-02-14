@@ -97,7 +97,7 @@ public class SampleService implements ISample {
             String fullUrl = String.format("%s%s", this.uploadDir, mediaFileNameEncoded);
             URL URLGui = new URL(fullUrl);
 
-            UserSampleModel us = new UserSampleModel(URLGui.toString(), userDetailsDTO.getEmail(), userDetailsDTO.getName(), customFileName);
+            UserSampleModel us = new UserSampleModel(URLGui.toString(), userDetailsDTO.getEmail(), userDetailsDTO.getName(), customFileName, "");
             UserSampleModel newUserSample = this.userSampleService.createUserSample(us);
             return ResponseEntity.ok().body(newUserSample);
 

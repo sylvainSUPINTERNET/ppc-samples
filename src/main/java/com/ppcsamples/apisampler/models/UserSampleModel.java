@@ -21,6 +21,8 @@ public class UserSampleModel {
 
     public String customFileName;
 
+    public String albumUuid;
+
     @CreatedDate
     private LocalDateTime created;
 
@@ -29,11 +31,12 @@ public class UserSampleModel {
 
     public UserSampleModel(){};
 
-    public UserSampleModel(String sampleUrl, String email, String name, String customFileName) {
+    public UserSampleModel(String sampleUrl, String email, String name, String customFileName, String albumUuid) {
         this.sampleUrl = sampleUrl;
         this.email = email;
         this.name = name;
         this.customFileName = customFileName;
+        this.albumUuid = albumUuid;
     }
     
 }
