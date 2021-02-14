@@ -94,7 +94,6 @@ public class SampleService implements ISample {
             response.put("data", sampleUpload.getName());
 
             String mediaFileNameEncoded = URLEncoder.encode(sampleUpload.getName(), StandardCharsets.UTF_8);
-            System.out.println(this.uploadDir);
             String fullUrl = String.format("%s%s", this.uploadDir, mediaFileNameEncoded);
             URL URLGui = new URL(fullUrl);
 
