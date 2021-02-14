@@ -9,5 +9,5 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public interface ISample {
     public ResponseEntity<?> uploadSample(MultipartFile file, String authToken, UserDetailsDTO userDetailsDTO, String customFileName);
-
+    public ResponseEntity<?> addSampleToAlbum(String albumUuid, String sampleUuid);
 }

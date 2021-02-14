@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserSampleRepository extends MongoRepository<UserSampleModel, String> {
+    UserSampleModel findBySampleUuid(String sampleUuid);
 }

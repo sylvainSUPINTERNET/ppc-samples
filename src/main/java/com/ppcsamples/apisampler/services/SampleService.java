@@ -17,11 +17,14 @@ import com.ppcsamples.apisampler.DTO.UserDetailsDTO;
 import com.ppcsamples.apisampler.interfaces.ISample;
 import com.ppcsamples.apisampler.metadata.SampleFormatEnum;
 import com.ppcsamples.apisampler.models.UserSampleModel;
+import com.ppcsamples.apisampler.repository.UserSampleRepository;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -36,9 +39,11 @@ public class SampleService implements ISample {
     String uploadDir;
 
     UserSampleService userSampleService;
+    UserSampleRepository userSampleRepository;
 
-    SampleService(UserSampleService userSampleService) {
+    SampleService(UserSampleService userSampleService, UserSampleRepository userSampleRepository) {
         this.userSampleService = userSampleService;
+        this.userSampleRepository = userSampleRepository;
     }
 
     @Override
@@ -97,7 +102,8 @@ public class SampleService implements ISample {
             String fullUrl = String.format("%s%s", this.uploadDir, mediaFileNameEncoded);
             URL URLGui = new URL(fullUrl);
 
-            UserSampleModel us = new UserSampleModel(URLGui.toString(), userDetailsDTO.getEmail(), userDetailsDTO.getName(), customFileName, "");
+            UUID uuid = UUID.randomUUID();
+            UserSampleModel us = new UserSampleModel(URLGui.toString(), userDetailsDTO.getEmail(), userDetailsDTO.getName(), customFileName, "", uuid.toString());
             UserSampleModel newUserSample = this.userSampleService.createUserSample(us);
             return ResponseEntity.ok().body(newUserSample);
 
@@ -105,6 +111,29 @@ public class SampleService implements ISample {
             logger.info(ex.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "unsupported media", ex);
        }
+    }
+
+    @Override
+    public ResponseEntity<?> addSampleToAlbum(String albumUuid, String sampleUuid) {
+        Map<String, Object> response = new HashMap<>();
+
+        if ( albumUuid == null || sampleUuid == null ) {
+            response.put("status", HttpStatus.BAD_REQUEST);
+            response.put("data", "Invalid albumUuid or sampleUuid (can't be null) ");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        UserSampleModel sample = this.userSampleRepository.findBySampleUuid(sampleUuid);
+        if ( sample == null ) {
+            response.put("status", HttpStatus.BAD_REQUEST);
+            response.put("data", "Sample not found for this uuid");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        sample.setAlbumUuid(albumUuid);
+        UserSampleModel sampleUpdated = this.userSampleRepository.save(sample);
+
+        return ResponseEntity.ok(sampleUpdated);
     }
     
 }
