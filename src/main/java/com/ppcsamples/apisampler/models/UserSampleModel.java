@@ -19,6 +19,8 @@ public class UserSampleModel {
 
     public String name;
 
+    public String customFileName;
+
     @CreatedDate
     private LocalDateTime created;
 
@@ -27,10 +29,11 @@ public class UserSampleModel {
 
     public UserSampleModel(){};
 
-    public UserSampleModel(String sampleUrl, String email, String name) {
+    public UserSampleModel(String sampleUrl, String email, String name, String customFileName) {
         this.sampleUrl = sampleUrl;
         this.email = email;
         this.name = name;
+        this.customFileName = customFileName;
     }
     
 }

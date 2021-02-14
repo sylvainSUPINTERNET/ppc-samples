@@ -30,10 +30,11 @@ public class SampleController {
 
     @CrossOrigin(origins = "*")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addSample (@RequestPart MultipartFile sample, @RequestAttribute String filterPpcToken, @RequestAttribute UserDetailsDTO userDetails) {
+    public ResponseEntity<?> addSample (@RequestPart MultipartFile sample, @RequestPart String customFileName, @RequestAttribute String filterPpcToken, @RequestAttribute UserDetailsDTO userDetails) {
         System.out.println(filterPpcToken);
         System.out.println(userDetails.getEmail());
-        return this.sampleService.uploadSample(sample, filterPpcToken, userDetails);
+
+        return this.sampleService.uploadSample(sample, filterPpcToken, userDetails, customFileName);
     }
 
 

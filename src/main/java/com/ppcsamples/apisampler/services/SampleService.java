@@ -21,6 +21,7 @@ import com.ppcsamples.apisampler.models.UserSampleModel;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,9 @@ import org.springframework.web.server.ResponseStatusException;
 public class SampleService implements ISample {
     Logger logger = LoggerFactory.getLogger(SampleService.class);
 
+    @Value("${ppc.dirUpload}")
+    String uploadDir;
+
     UserSampleService userSampleService;
 
     SampleService(UserSampleService userSampleService) {
@@ -38,7 +42,7 @@ public class SampleService implements ISample {
     }
 
     @Override
-    public ResponseEntity<?> uploadSample(MultipartFile sample, String authToken, UserDetailsDTO userDetailsDTO){
+    public ResponseEntity<?> uploadSample(MultipartFile sample, String authToken, UserDetailsDTO userDetailsDTO, String customFileName){
 
         Map<String, Object> response = new HashMap<>();
         try {
@@ -90,10 +94,11 @@ public class SampleService implements ISample {
             response.put("data", sampleUpload.getName());
 
             String mediaFileNameEncoded = URLEncoder.encode(sampleUpload.getName(), StandardCharsets.UTF_8);
-            String fullUrl = String.format("http://localhost:7777/api/v1/%s", mediaFileNameEncoded);
+            System.out.println(this.uploadDir);
+            String fullUrl = String.format("%s%s", this.uploadDir, mediaFileNameEncoded);
             URL URLGui = new URL(fullUrl);
 
-            UserSampleModel us = new UserSampleModel(URLGui.toString(), userDetailsDTO.getEmail(), userDetailsDTO.getName());
+            UserSampleModel us = new UserSampleModel(URLGui.toString(), userDetailsDTO.getEmail(), userDetailsDTO.getName(), customFileName);
             UserSampleModel newUserSample = this.userSampleService.createUserSample(us);
             return ResponseEntity.ok().body(newUserSample);
 
