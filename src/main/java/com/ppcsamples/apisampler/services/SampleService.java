@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
@@ -173,6 +174,50 @@ public class SampleService implements ISample {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
+    }
+
+    /**
+     * Nodejs API => create the album, but when we add sample (java side) the id from this album is also saved in mongoDB
+     */
+    @Override
+    public ResponseEntity<?> getSamplesB64ForAlbumUuid(String albumUuid) {
+        Map<String, Object> response = new HashMap<>();
+
+        List<UserSampleModel> samples = this.userSampleRepository.findByAlbumUuid(albumUuid);
+
+        List<Map<String, String>> b64ReadyForSrcSamples = new ArrayList<>();
+
+        samples.stream().forEach( e -> {
+            String[] splited = e.getSampleUrl().split("/");
+            String fileName = splited[splited.length - 1];
+
+            String path = String.format("%s/%s",
+            System.getProperty("user.dir").replace("\\", "/") + "/" + "samples", fileName);
+            File sampleUpload = new File(path);
+
+            try {
+                byte[] bytes = FileUtils.readFileToByteArray(sampleUpload);
+                String encodedB64 = Base64.getEncoder().encodeToString(bytes);  
+
+                String readyForAudioSrc = "data:audio/mpeg;base64," + encodedB64;
+
+                Map<String, String> sampleB64Obj = new HashMap<>();
+                sampleB64Obj.put("b64", readyForAudioSrc);
+                b64ReadyForSrcSamples.add(sampleB64Obj); 
+            } catch (IOException exception) {
+                
+                response.put("status", HttpStatus.BAD_GATEWAY);
+                response.put("data", exception.getMessage());
+                
+                ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(response);
+
+            }
+
+        });
+
+        response.put("data", b64ReadyForSrcSamples);
+        response.put("status", HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     
 }

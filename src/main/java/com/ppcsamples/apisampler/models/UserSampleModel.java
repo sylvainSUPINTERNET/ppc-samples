@@ -45,4 +45,37 @@ public class UserSampleModel {
     public void setAlbumUuid(String albumUuid) {
         this.albumUuid = albumUuid;
     }
+
+    public String getSampleUrl(){
+        return this.sampleUrl;
+    }
+
+    /**
+     * @return LocalDateTime return the created
+     */
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    /**
+     * @param created the created to set
+     */
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
+    /**
+     * @return LocalDateTime return the modified
+     */
+    public LocalDateTime getModified() {
+        return modified;
+    }
+
+    /**
+     * @param modified the modified to set
+     */
+    public void setModified(LocalDateTime modified) {
+        this.modified = modified;
+    }
+
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,8 +33,17 @@ public class SampleController {
         this.sampleService = sampleService;
     };
 
+
     @CrossOrigin(origins = "*")
-    @GetMapping("/{fileNamWithExtension}")
+    @GetMapping("/audio/b64")
+    public ResponseEntity<?> getSamplesAudio(@RequestAttribute String filterPpcToken,
+     @RequestAttribute UserDetailsDTO userDetails, @RequestParam String albumUuid) {
+        return this.sampleService.getSamplesB64ForAlbumUuid(albumUuid);
+    }
+
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/{fileNamWithExtension}/b64")
     public ResponseEntity<?> getSampleInputStream(@PathVariable String fileNamWithExtension, @RequestAttribute String filterPpcToken, @RequestAttribute UserDetailsDTO userDetails) {
         System.out.println(filterPpcToken);
         System.out.println(userDetails.getEmail());
@@ -44,6 +54,7 @@ public class SampleController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addSample(@RequestPart MultipartFile sample, @RequestPart String customFileName,
             @RequestAttribute String filterPpcToken, @RequestAttribute UserDetailsDTO userDetails) {
+
         System.out.println(filterPpcToken);
         System.out.println(userDetails.getEmail());
 

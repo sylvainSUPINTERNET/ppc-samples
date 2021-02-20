@@ -11,4 +11,5 @@ public interface ISample {
     public ResponseEntity<?> uploadSample(MultipartFile file, String authToken, UserDetailsDTO userDetailsDTO, String customFileName);
     public ResponseEntity<?> addSampleToAlbum(String albumUuid, String sampleUuid);
     public ResponseEntity<?> getSamplesInputStream(String fileNamWithExtension);
+    public ResponseEntity<?> getSamplesB64ForAlbumUuid(String albumUuid);
 }
