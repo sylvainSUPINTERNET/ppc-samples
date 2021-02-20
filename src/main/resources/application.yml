@@ -16,4 +16,4 @@ server:
 
 ppc:
     authCheckUrl: http://localhost:5999/api/v1/token/verify
-    dirUpload : http://localhost:7777/api/v1/
+    dirUpload : http://localhost:7777/api/v1/samples/

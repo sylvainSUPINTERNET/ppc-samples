@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -30,6 +31,14 @@ public class SampleController {
     SampleController(SampleService sampleService) {
         this.sampleService = sampleService;
     };
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/{fileNamWithExtension}")
+    public ResponseEntity<?> getSampleInputStream(@PathVariable String fileNamWithExtension, @RequestAttribute String filterPpcToken, @RequestAttribute UserDetailsDTO userDetails) {
+        System.out.println(filterPpcToken);
+        System.out.println(userDetails.getEmail());
+        return this.sampleService.getSamplesInputStream(fileNamWithExtension);
+    }
 
     @CrossOrigin(origins = "*")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
