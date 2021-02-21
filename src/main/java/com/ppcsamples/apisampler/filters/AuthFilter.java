@@ -20,6 +20,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -60,17 +61,23 @@ public class AuthFilter implements Filter {
 
             var entity = new HttpEntity(headers);
     
-            ResponseEntity<UserDataDTO> respAuthCheck = this.AuthCheckService.getRestTemplate().exchange(this.authCheckUrl, HttpMethod.GET, entity, UserDataDTO.class);
-            UserDetailsDTO userDetailsDTO = respAuthCheck.getBody().data;
+            try {
+                ResponseEntity<UserDataDTO> respAuthCheck = this.AuthCheckService.getRestTemplate().exchange(this.authCheckUrl, HttpMethod.GET, entity, UserDataDTO.class);
+                UserDetailsDTO userDetailsDTO = respAuthCheck.getBody().data;
             
-            /*
-            <200,{"data":{"sub":"114706333881848131803","name":"Sylvain Joly","given_name":"Sylvain","family_name":"Joly","picture":"https://lh5.googleusercontent.com/-a4ImIYU-7wU/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucm-zwF2Nrbv6ke4xLMu-opErqbF7w/s96-c/photo.jpg","email":"sylvain.joly00@gmail.com","email_verified":true,"locale":"fr","iat":1609509965}},[X-Powered-By:"Express", Access-Control-Allow-Origin:"http://localhost:3000", Vary:"Origin", Access-Control-Allow-Credentials:"true", Content-Type:"application/json; charset=utf-8", Content-Length:"328", ETag:"W/"148-OQ1KfO2+eBvWJ1DV7Z7rcCTmqLs"", Date:"Sun, 07 Feb 2021 19:33:53 GMT", Connection:"keep-alive"]>
-            */
-                
-            req.setAttribute("filterPpcToken", jwtToken); 
-            req.setAttribute("userDetails", userDetailsDTO);
+                /*
+                <200,{"data":{"sub":"114706333881848131803","name":"Sylvain Joly","given_name":"Sylvain","family_name":"Joly","picture":"https://lh5.googleusercontent.com/-a4ImIYU-7wU/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucm-zwF2Nrbv6ke4xLMu-opErqbF7w/s96-c/photo.jpg","email":"sylvain.joly00@gmail.com","email_verified":true,"locale":"fr","iat":1609509965}},[X-Powered-By:"Express", Access-Control-Allow-Origin:"http://localhost:3000", Vary:"Origin", Access-Control-Allow-Credentials:"true", Content-Type:"application/json; charset=utf-8", Content-Length:"328", ETag:"W/"148-OQ1KfO2+eBvWJ1DV7Z7rcCTmqLs"", Date:"Sun, 07 Feb 2021 19:33:53 GMT", Connection:"keep-alive"]>
+                */
+                    
+                req.setAttribute("filterPpcToken", jwtToken); 
+                req.setAttribute("userDetails", userDetailsDTO);
+    
+                chain.doFilter(request, response);
+           
+            } catch ( Exception e ) {
+                ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+            }
 
-            chain.doFilter(request, response);
         }
 
         
