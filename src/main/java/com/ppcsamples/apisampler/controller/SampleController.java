@@ -34,15 +34,14 @@ public class SampleController {
     };
 
 
-    @CrossOrigin(origins = "*")
     @GetMapping("/audio/b64")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<?> getSamplesAudio(@RequestAttribute String filterPpcToken,
      @RequestAttribute UserDetailsDTO userDetails, @RequestParam String albumUuid) {
         return this.sampleService.getSamplesB64ForAlbumUuid(albumUuid);
     }
 
 
-    @CrossOrigin(origins = "*")
     @GetMapping("/{fileNamWithExtension}/b64")
     public ResponseEntity<?> getSampleInputStream(@PathVariable String fileNamWithExtension, @RequestAttribute String filterPpcToken, @RequestAttribute UserDetailsDTO userDetails) {
         System.out.println(filterPpcToken);
@@ -50,7 +49,6 @@ public class SampleController {
         return this.sampleService.getSamplesInputStream(fileNamWithExtension);
     }
 
-    @CrossOrigin(origins = "*")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addSample(@RequestPart MultipartFile sample, @RequestPart String customFileName,
             @RequestAttribute String filterPpcToken, @RequestAttribute UserDetailsDTO userDetails) {
@@ -61,7 +59,6 @@ public class SampleController {
         return this.sampleService.uploadSample(sample, filterPpcToken, userDetails, customFileName);
     }
 
-    @CrossOrigin(origins = "*")
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addSampleToAlbum(@RequestBody SampleUpdateDTO sampleUpdateDTO,
             @RequestAttribute String filterPpcToken, @RequestAttribute UserDetailsDTO userDetails) {
