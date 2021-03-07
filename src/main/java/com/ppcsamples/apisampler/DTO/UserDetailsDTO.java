@@ -13,10 +13,14 @@ public class UserDetailsDTO {
     boolean email_verified;
     String locale;
     int iat;
+    String uuid;
 
     UserDetailsDTO(){}
 
 
+    public String getUuid() {
+        return this.uuid;
+    }
     public String getName(){
         return this.name;
     }

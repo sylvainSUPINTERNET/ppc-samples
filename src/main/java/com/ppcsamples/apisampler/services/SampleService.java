@@ -181,7 +181,7 @@ public class SampleService implements ISample {
      */
     @Override
     public ResponseEntity<?> getSamplesB64ForAlbumUuid(String albumUuid) {
-        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>(); 
 
         List<UserSampleModel> samples = this.userSampleRepository.findByAlbumUuid(albumUuid);
 
