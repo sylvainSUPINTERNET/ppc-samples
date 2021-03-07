@@ -1,8 +1,10 @@
 package com.ppcsamples.apisampler.services;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import com.ppcsamples.apisampler.DTO.room.CreatePayload;
 import com.ppcsamples.apisampler.DTO.room.RoomDTO;
@@ -12,6 +14,8 @@ import com.ppcsamples.apisampler.repository.RoomRepository;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,6 +29,11 @@ public class RoomService {
     
     public RoomService(RoomRepository roomRepository){
         this.roomRepository = roomRepository;
+    }
+
+    public List<RoomDTO> getUserRooms(String currentUserUuid) {
+        List<Room> userRooms = this.roomRepository.findAllByUsersUuids(currentUserUuid);
+        return userRooms.stream().map(room -> this.modelMapper.map(room, RoomDTO.class)).collect(Collectors.toList());
     }
 
     public RoomDTO create(CreatePayload createPayload, String currentUserUuid) {

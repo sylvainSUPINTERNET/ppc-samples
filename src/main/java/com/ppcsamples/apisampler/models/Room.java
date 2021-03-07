@@ -31,6 +31,9 @@ public class Room {
     @LastModifiedDate
     private LocalDateTime modified;
 
+    public Room(){
+        
+    }
     public Room(String displayName, ArrayList<String> usersUuids, String owner, String uuid) {
         this.displayName = displayName;
         this.usersUuids = usersUuids;

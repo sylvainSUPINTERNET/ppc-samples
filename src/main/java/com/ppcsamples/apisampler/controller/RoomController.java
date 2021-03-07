@@ -10,6 +10,7 @@ import com.ppcsamples.apisampler.models.Room;
 import com.ppcsamples.apisampler.services.RoomService;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,4 +35,11 @@ public class RoomController {
         return ResponseEntity.ok().body(resp);
     }
     
+    @GetMapping
+    public ResponseEntity<?> findUserRooms(@RequestAttribute UserDetailsDTO userDetails) {
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("data", this.roomService.getUserRooms(userDetails.getUuid()));
+        return ResponseEntity.ok().body(resp);
+    }
+
 }
